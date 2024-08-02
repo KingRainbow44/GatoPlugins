@@ -8,7 +8,7 @@ using FreakyProxy.Events;
 
 namespace InfiniteStamina;
 
-public abstract class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
+public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly Dictionary<ISession, bool> Enabled = new();
 
     /// <summary>
