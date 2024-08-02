@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteStamina", "InfiniteStamina\InfiniteStamina.csproj", "{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginAPI", "..\GatoProxy\PluginAPI\PluginAPI.csproj", "{C7470F18-C3DC-4F58-836B-E253C9E61351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\GatoProxy\Common\Common.csproj", "{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7470F18-C3DC-4F58-836B-E253C9E61351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7470F18-C3DC-4F58-836B-E253C9E61351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7470F18-C3DC-4F58-836B-E253C9E61351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7470F18-C3DC-4F58-836B-E253C9E61351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
