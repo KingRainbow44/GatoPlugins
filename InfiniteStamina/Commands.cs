@@ -3,7 +3,7 @@ using FreakyProxy;
 
 namespace InfiniteStamina.Commands;
 
-public class Commands {
+public static class Commands {
     private const string StaminaUsage = "stamina <on|off>";
 
     [Command("stamina", StaminaUsage, "Enables or disables infinite stamina.")]
