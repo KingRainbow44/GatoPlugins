@@ -24,7 +24,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
     public override void OnLoad() {
         Instance = this;
-        _config = this.GetConfig<Config>();
+        _config = this.GetConfig(_config);
 
         CommandProcessor.RegisterAllCommands("InfiniteStamina");
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
