@@ -39,7 +39,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var position = new Vector {
             X = mark.Pos.X,
             Y = y,
-            Z = mark.Pos.Y
+            Z = mark.Pos.Z
         };
 
         @event.Session.Player.Teleport(position, mark.SceneId);
