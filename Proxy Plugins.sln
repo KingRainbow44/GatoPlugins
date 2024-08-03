@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginAPI", "..\GatoProxy\P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\GatoProxy\Common\Common.csproj", "{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapTeleport", "MapTeleport\MapTeleport.csproj", "{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualizer", "Visualizer\Visualizer.csproj", "{06A377A0-736B-4605-944D-7D74A1C70FE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
