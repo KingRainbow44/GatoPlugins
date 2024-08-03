@@ -30,7 +30,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         if (!_config.Enabled) return;
 
         var packet = @event.Packet;
-        if (packet.CmdID != CmdID.GetPlayerTokenRsp) return;
+        if (packet.CmdID != CmdID.PlayerLoginReq) return;
 
         // Send the UID replacement packet.
         ReplaceUid(@event.Session);
