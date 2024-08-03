@@ -6,6 +6,7 @@ using Common.Util;
 using Fleck;
 using FreakyProxy;
 using FreakyProxy.Events;
+using Google.Protobuf;
 using Newtonsoft.Json;
 using ProtoUntyped;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -154,7 +155,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var packet = @event.Packet;
         var data = @event.Message;
 
-        var serialized = JsonSerializer.Serialize(data, _jsonOptions);
+        var formatter = new JsonFormatter(JsonFormatter.Settings.Default);
+        var serialized = formatter.Format(data) ?? "{}";
 
         // Send the message to all connected clients.
         var packetData = new PacketData {
