@@ -23,12 +23,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var msg = packet.Body.ParseFrom<MapMarkReq>()!;
         if (msg.Operation is not (Add or Mod)) return;
 
-        var mark = msg.Operation switch {
-            Add => msg.Mark,
-            Mod => msg.Old,
-            _ => throw new Exception("Unknown mark operation.")
-        };
-
+        var mark = msg.Mark;
         if (mark.PointType is not MapMarkPointType.FishPool) return;
 
         // Cancel the packet.
