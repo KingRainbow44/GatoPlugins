@@ -1,6 +1,5 @@
 ﻿// ReSharper disable UnusedType.Global
 
-using System.Text.Json;
 using Common.Protocol;
 using Common.Util;
 using Fleck;
@@ -42,9 +41,14 @@ public struct PacketData {
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static readonly Dictionary<CmdID, Type> _packetMap = new();
-    private static readonly List<IWebSocketConnection> _connections = [];
+    private static readonly Dictionary<string, CmdID> _nameMap = new();
 
+    private static readonly List<IWebSocketConnection> _connections = [];
     private static readonly JsonFormatter _formatter = new(JsonFormatter.Settings.Default);
+
+    public static bool HighlightedOnly = false;
+    public static readonly List<CmdID> Highlighted = [];
+    public static readonly List<CmdID> Blacklisted = [];
 
     public override void OnLoad() {
         // Initialize the packet map.
@@ -61,6 +65,17 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                     _packetMap.Add((CmdID)id, t);
                 }
             });
+
+        foreach (var name in Enum.GetNames<CmdID>()) {
+            var value = (CmdID)Enum.Parse(typeof(CmdID), name);
+            _nameMap.Add(name, value);
+        }
+
+        // Read the configuration file.
+        var config = this.GetConfig(new Config());
+        Blacklisted.AddRange(config.Blacklisted
+            .Select(name => _nameMap[name])
+            .ToList());
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {
@@ -81,9 +96,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                     throw new Exception("Unknown logging level.");
             }
         };
-        var server = new WebSocketServer("ws://0.0.0.0:8080");
+        var server = new WebSocketServer($"ws://{config.BindAddress}:{config.BindPort}");
         server.Start(OnClientConnected);
 
+        // Register commands.
+        CommandProcessor.RegisterAllCommands("Visualizer");
         // Register event listeners.
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
         PluginManager.AddEventListener<SendPacketEvent>(OnSendPacket);
@@ -123,6 +140,9 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static void OnReceivePacket(ReceivePacketEvent @event) {
         var packet = @event.Packet;
 
+        // Check if the packet should be shown.
+        if (!ShowPacket(packet)) return;
+
         // Check if the message can be parsed.
         string serialized;
         if (_packetMap.TryGetValue(packet.CmdID, out var type)) {
@@ -150,8 +170,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
     private static void OnSendPacket(SendPacketEvent @event) {
         var packet = @event.Packet;
-        var data = @event.Message;
 
+        // Check if the packet should be shown.
+        if (!ShowPacket(packet)) return;
+
+        var data = @event.Message;
         var serialized = _formatter.Format(data) ?? "{}";
 
         // Send the message to all connected clients.
@@ -167,5 +190,13 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             PacketId = 1, PacketData = packetData
         });
         _connections.ForEach(c => c.Send(message));
+    }
+
+    /// <summary>
+    /// Checks to see if a packet should be visualized.
+    /// </summary>
+    private static bool ShowPacket(Packet packet) {
+        if (HighlightedOnly && !Highlighted.Contains(packet.CmdID)) return false;
+        return !Blacklisted.Contains(packet.CmdID);
     }
 }
