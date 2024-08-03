@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapTeleport", "MapTeleport\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualizer", "Visualizer\Visualizer.csproj", "{06A377A0-736B-4605-944D-7D74A1C70FE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windblade", "Windblade\Windblade.csproj", "{9864044A-5E9E-4825-A468-DD496DD6948A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06A377A0-736B-4605-944D-7D74A1C70FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9864044A-5E9E-4825-A468-DD496DD6948A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9864044A-5E9E-4825-A468-DD496DD6948A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9864044A-5E9E-4825-A468-DD496DD6948A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9864044A-5E9E-4825-A468-DD496DD6948A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
