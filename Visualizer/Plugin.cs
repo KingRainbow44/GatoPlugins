@@ -44,12 +44,9 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static readonly Dictionary<CmdID, Type> _packetMap = new();
     private static readonly List<IWebSocketConnection> _connections = [];
 
-    private static readonly JsonSerializerOptions _jsonOptions = new();
+    private static readonly JsonFormatter _formatter = new(JsonFormatter.Settings.Default);
 
     public override void OnLoad() {
-        // Add protobuf support to the JSON serializer.
-        _jsonOptions.AddProtobufSupport();
-
         // Initialize the packet map.
         AppDomain.CurrentDomain
             .GetAssemblies()
@@ -129,11 +126,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         // Check if the message can be parsed.
         string serialized;
         if (_packetMap.TryGetValue(packet.CmdID, out var type)) {
-            var decoded = packet.Body.ParseFrom(type);
-            serialized = JsonSerializer.Serialize(decoded, _jsonOptions);
+            var decoded = packet.Body.ParseFrom(type) as IMessage;
+            serialized = _formatter.Format(decoded) ?? "{}";
         } else {
             var decoded = ProtoObject.Decode(packet.Body);
-            serialized = JsonSerializer.Serialize(decoded.ToFieldDictionary(), _jsonOptions);
+            serialized = JsonSerializer.Serialize(decoded.ToFieldDictionary());
         }
 
         // Send the message to all connected clients.
@@ -155,8 +152,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var packet = @event.Packet;
         var data = @event.Message;
 
-        var formatter = new JsonFormatter(JsonFormatter.Settings.Default);
-        var serialized = formatter.Format(data) ?? "{}";
+        var serialized = _formatter.Format(data) ?? "{}";
 
         // Send the message to all connected clients.
         var packetData = new PacketData {
