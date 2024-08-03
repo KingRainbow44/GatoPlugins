@@ -50,6 +50,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
+    private WebSocketServer? _server;
+
     public override void OnLoad() {
         // Initialize the packet map.
         AppDomain.CurrentDomain
@@ -96,8 +98,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                     throw new Exception("Unknown logging level.");
             }
         };
-        var server = new WebSocketServer($"ws://{config.BindAddress}:{config.BindPort}");
-        server.Start(OnClientConnected);
+        _server = new WebSocketServer($"ws://{config.BindAddress}:{config.BindPort}");
+        _server.Start(OnClientConnected);
 
         // Register commands.
         CommandProcessor.RegisterAllCommands("Visualizer");
@@ -106,6 +108,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         PluginManager.AddEventListener<SendPacketEvent>(OnSendPacket);
 
         Logger.Info("Visualizer plugin loaded.");
+    }
+
+    public override void OnUnload() {
+        _server?.ListenerSocket.Close();
+        _server?.Dispose();
     }
 
     /// <summary>
