@@ -10,20 +10,30 @@ namespace InfiniteStamina;
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly Dictionary<ISession, bool> Enabled = new();
+    private static Plugin? Instance;
+
+    private Config _config = new();
 
     /// <summary>
     /// Gets the enabled state for the specified session.
     /// </summary>
     public static bool GetEnabled(ISession session) {
-        Enabled.TryAdd(session, false);
+        Enabled.TryAdd(session, Instance?._config.Enabled ?? false);
         return Enabled[session];
     }
 
     public override void OnLoad() {
+        Instance = this;
+        _config = this.GetConfig<Config>();
+
         CommandProcessor.RegisterAllCommands("InfiniteStamina");
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
 
         Logger.Info("Infinite Stamina plugin loaded.");
+    }
+
+    public override void OnUnload() {
+        Instance = null;
     }
 
     private static void OnReceivePacket(ReceivePacketEvent @event) {
