@@ -3,6 +3,7 @@
 public struct Config {
     public Config() { }
 
+    public bool EnableLogger { get; set; } = false;
     public string BindAddress { get; set; } = "0.0.0.0";
     public ushort BindPort { get; set; } = 8080;
 

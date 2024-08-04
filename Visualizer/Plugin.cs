@@ -54,7 +54,6 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
-
     private WebSocketServer? _server;
 
     public override void OnLoad() {
@@ -88,6 +87,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {
+            if (!config.EnableLogger) return;
+
             switch (level) {
                 case LogLevel.Debug:
                     Logger.Debug(message);
