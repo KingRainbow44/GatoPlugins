@@ -1,5 +1,7 @@
 ﻿// ReSharper disable UnusedType.Global
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Common.Protocol;
 using Common.Util;
 using Fleck;
@@ -40,6 +42,8 @@ public struct PacketData {
 }
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
+    private static readonly JsonSerializerOptions _options = new();
+
     private static readonly Dictionary<CmdID, Type> _packetMap = new();
     private static readonly Dictionary<string, CmdID> _nameMap = new();
 
@@ -50,9 +54,12 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
+
     private WebSocketServer? _server;
 
     public override void OnLoad() {
+        _options.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+
         // Initialize the packet map.
         AppDomain.CurrentDomain
             .GetAssemblies()
@@ -157,7 +164,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             serialized = _formatter.Format(decoded) ?? "{}";
         } else {
             var decoded = ProtoObject.Decode(packet.Body);
-            serialized = JsonSerializer.Serialize(decoded.ToFieldDictionary());
+            serialized = JsonSerializer.Serialize(decoded.ToFieldDictionary(), _options);
         }
 
         // Send the message to all connected clients.
