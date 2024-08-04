@@ -84,6 +84,9 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         Blacklisted.AddRange(config.Blacklisted
             .Select(name => _nameMap[name])
             .ToList());
+        Highlighted.AddRange(config.Highlighted
+            .Select(name => _nameMap[name])
+            .ToList());
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {
