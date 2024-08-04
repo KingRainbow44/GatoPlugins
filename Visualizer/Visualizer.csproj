@@ -19,8 +19,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\GatoProxy\Common\Common.csproj" />
-      <ProjectReference Include="..\..\GatoProxy\PluginAPI\PluginAPI.csproj" />
+      <ProjectReference Include="..\..\GatoProxy\FreakyProxy\FreakyProxy.csproj" />
     </ItemGroup>
 
     <ItemGroup>

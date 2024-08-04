@@ -4,6 +4,7 @@ using Common.Protocol;
 using Common.Protocol.Proto;
 using Common.Util;
 using FreakyProxy;
+using FreakyProxy.PacketProcessor;
 using Google.Protobuf;
 
 namespace Windblade;
@@ -36,7 +37,7 @@ public static class Windblade {
     /// <summary>
     /// Executes a script from a file path.
     /// </summary>
-    public static async Task<bool> ExecuteScript(ISession session, string path) {
+    public static async Task<bool> ExecuteScript(Session session, string path) {
         try {
             var scriptPath = Plugin.Instance!.FilePath(path);
             var scriptFile = await File.ReadAllBytesAsync(scriptPath);
@@ -62,7 +63,7 @@ public static class Windblade {
     /// <summary>
     /// Executes a script from a string.
     /// </summary>
-    public static bool Execute(ISession session, string script) {
+    public static bool Execute(Session session, string script) {
         try {
             var bytecode = Compile(script);
             Execute(session, bytecode);
@@ -76,7 +77,7 @@ public static class Windblade {
     /// <summary>
     /// Executes a Lua script.
     /// </summary>
-    public static async void Execute(ISession session, byte[] payload) {
+    public static async void Execute(Session session, byte[] payload) {
         var packet = new PlayerNormalLuaShellNotify {
             Payload = ByteString.CopyFrom(payload)
         };

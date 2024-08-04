@@ -5,11 +5,12 @@ using Common.Protocol.Proto;
 using Common.Util;
 using FreakyProxy;
 using FreakyProxy.Events;
+using FreakyProxy.PacketProcessor;
 
 namespace InfiniteStamina;
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
-    public static readonly Dictionary<ISession, bool> Enabled = new();
+    public static readonly Dictionary<Session, bool> Enabled = new();
     private static Plugin? Instance;
 
     private Config _config = new();
@@ -17,7 +18,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     /// <summary>
     /// Gets the enabled state for the specified session.
     /// </summary>
-    public static bool GetEnabled(ISession session) {
+    public static bool GetEnabled(Session session) {
         Enabled.TryAdd(session, Instance?._config.Enabled ?? false);
         return Enabled[session];
     }

@@ -1,6 +1,7 @@
 ﻿using Common.Protocol;
 using FreakyProxy;
 using FreakyProxy.Events;
+using FreakyProxy.PacketProcessor;
 using WindbladeAPI = Windblade.Windblade;
 
 namespace UIDHider;
@@ -21,7 +22,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     /// <summary>
     /// Sets the UID of the player to the config value.
     /// </summary>
-    private void ReplaceUid(ISession session) {
+    private void ReplaceUid(Session session) {
         WindbladeAPI.Execute(session,
             Script.Replace("{{REPLACE}}", _config.ReplaceWith));
     }

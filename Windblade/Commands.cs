@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using Common.Util;
-using FreakyProxy;
+using FreakyProxy.Commands;
 
 namespace Windblade.Commands;
 

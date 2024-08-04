@@ -1,5 +1,5 @@
 ﻿using Common.Util;
-using FreakyProxy;
+using FreakyProxy.Commands;
 
 namespace InfiniteStamina.Commands;
 
