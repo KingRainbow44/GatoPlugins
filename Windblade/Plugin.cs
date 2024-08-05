@@ -10,13 +10,7 @@ using Google.Protobuf;
 namespace Windblade;
 
 public static class Windblade {
-#if OS_WINDOWS
-    [DllImport("gc-windy.dll", CharSet = CharSet.Ansi)]
-#elif OS_LINUX
-    [DllImport("libgc-windy.so", CharSet = CharSet.Ansi)]
-#else
-#error Unsupported platform. Please don't play Genshin Impact on macOS.
-#endif
+    [DllImport("gc-windy", CharSet = CharSet.Ansi)]
     private static extern int compile(string script, nuint output);
 
     /// <summary>
