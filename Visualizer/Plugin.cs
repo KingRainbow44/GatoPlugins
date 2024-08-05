@@ -134,11 +134,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     /// </summary>
     private void OnClientConnected(IWebSocketConnection connection) {
         connection.OnOpen = () => {
-            Logger.Info("Client connected.");
+            Logger.Debug("Client connected.");
             _connections.Add(connection);
         };
         connection.OnClose = () => {
-            Logger.Info("Client disconnected.");
+            Logger.Debug("Client disconnected.");
             _connections.Remove(connection);
         };
         connection.OnMessage = message => OnMessage(connection, message);
