@@ -39,6 +39,9 @@ public struct PacketData {
 
     [JsonProperty(PropertyName = "data")]
     public string Data;
+
+    [JsonProperty(PropertyName = "binary")]
+    public string RawData;
 }
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
@@ -178,7 +181,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             PacketId = (ushort)packet.CmdID,
             PacketName = packet.CmdID.ToString(),
             Length = (uint)packet.Body.Length,
-            Data = serialized
+            Data = serialized,
+            RawData = Convert.ToBase64String(packet.Body)
         };
         var message = JsonConvert.SerializeObject(new VisualizerMessage {
             PacketId = 1, PacketData = packetData
@@ -202,7 +206,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             PacketId = (ushort)packet.CmdID,
             PacketName = packet.CmdID.ToString(),
             Length = (uint)packet.Body.Length,
-            Data = serialized
+            Data = serialized,
+            RawData = Convert.ToBase64String(packet.Body)
         };
         var message = JsonConvert.SerializeObject(new VisualizerMessage {
             PacketId = 1, PacketData = packetData
