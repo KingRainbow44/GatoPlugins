@@ -1,5 +1,6 @@
 ﻿// ReSharper disable UnusedType.Global
 
+using System.Collections;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Common.Protocol;
@@ -50,7 +51,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static readonly Dictionary<CmdID, Type> _packetMap = new();
     private static readonly Dictionary<string, CmdID> _nameMap = new();
 
-    private static readonly List<IWebSocketConnection> _connections = [];
+    private static readonly ArrayList _connections = ArrayList.Synchronized([]);
     private static readonly JsonFormatter _formatter = new(JsonFormatter.Settings.Default);
 
     public static bool HighlightedOnly = false;
@@ -187,7 +188,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var message = JsonConvert.SerializeObject(new VisualizerMessage {
             PacketId = 1, PacketData = packetData
         });
-        _connections.ForEach(c => c.Send(message));
+
+        foreach (var connection in _connections) {
+            if (connection is IWebSocketConnection c) c.Send(message);
+        }
     }
 
     private static void OnSendPacket(SendPacketEvent @event) {
@@ -212,7 +216,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var message = JsonConvert.SerializeObject(new VisualizerMessage {
             PacketId = 1, PacketData = packetData
         });
-        _connections.ForEach(c => c.Send(message));
+
+        foreach (var connection in _connections) {
+            if (connection is IWebSocketConnection c) c.Send(message);
+        }
     }
 
     /// <summary>
