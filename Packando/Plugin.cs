@@ -10,18 +10,18 @@ namespace Packando;
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private readonly Dictionary<CmdID, Type> _packetMap = new();
-    private readonly Dictionary<CmdID, List<MethodInfo>> _handlers = new();
+    private readonly Dictionary<CmdID, List<(SendType, MethodInfo)>> _handlers = new();
 
     /// <summary>
     /// Returns a list of handlers for a packet.
     /// </summary>
-    private List<MethodInfo> FindHandlers(CmdID packet) {
+    private List<(SendType, MethodInfo)> FindHandlers(CmdID packet) {
         if (_handlers.TryGetValue(packet, out var handlers))
             return handlers;
 
         // Add a new list if one doesn't exist.
-        handlers = new List<MethodInfo>();
-        _handlers.Add(packet, handlers);
+        handlers = new List<(SendType, MethodInfo)>();
+        _handlers[packet] = handlers;
 
         return handlers;
     }
@@ -69,17 +69,18 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var attribute = info.GetCustomAttribute<Handler>();
         if (attribute is null) return;
 
-        RegisterHandler(attribute.PacketId, info);
+        RegisterHandler(attribute.ListenFor, attribute.PacketId, info);
     }
 
     /// <summary>
     /// Registers a packet handler.
     /// </summary>
+    /// <param name="type">The type of packets to listen for.</param>
     /// <param name="packetId">The ID of the packet.</param>
     /// <param name="invoker">The method info of the packet handler method.</param>
-    public void RegisterHandler(CmdID packetId, MethodInfo invoker) {
+    public void RegisterHandler(SendType type, CmdID packetId, MethodInfo invoker) {
         var handlers = FindHandlers(packetId);
-        handlers.Add(invoker);
+        handlers.Add((type, invoker));
 
         _handlers[packetId] = handlers;
         Logger.Debug($"Registered handler for packet {packetId}.");
@@ -90,7 +91,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     /// <summary>
     /// Invokes all packet handlers for a packet.
     /// </summary>
-    private async ValueTask<(PacketResult, IMessage?)> InvokeHandlers(Session session, Packet packet) {
+    private async ValueTask<(PacketResult, IMessage?)> InvokeHandlers(
+        Session session, Packet packet, SendType type) {
         var result = PacketResult.Forward;
 
         // Parse the packet body.
@@ -100,7 +102,9 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var body = packet.Body.ParseFrom(packetType) as IMessage;
 
         // Invoke handlers.
-        foreach (var handler in FindHandlers(packet.CmdID)) {
+        foreach (var (sendType, handler) in FindHandlers(packet.CmdID)) {
+            if (sendType != SendType.All && sendType != type) continue;
+
             // The 'body' parameter is mutable between handlers.
             if (handler.Invoke(null, [session, packet.Metadata, body])
                 is not ValueTask<PacketResult> invokeResult) continue;
@@ -127,7 +131,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
     private async void OnReceivePacket(ReceivePacketEvent @event) {
         var (result, body) = await InvokeHandlers(
-            @event.Session, @event.Packet);
+            @event.Session, @event.Packet, SendType.Server);
 
         switch (result) {
             case PacketResult.Drop:
@@ -145,7 +149,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
     private async void OnSendPacket(SendPacketEvent @event) {
         var (result, body) = await InvokeHandlers(
-            @event.Session, @event.Packet);
+            @event.Session, @event.Packet, SendType.Proxy);
 
         switch (result) {
             case PacketResult.Drop:
