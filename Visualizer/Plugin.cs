@@ -1,6 +1,7 @@
 ﻿// ReSharper disable UnusedType.Global
 
 using System.Collections;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Common.Protocol;
@@ -54,7 +55,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static readonly ArrayList _connections = ArrayList.Synchronized([]);
     private static readonly JsonFormatter _formatter = new(JsonFormatter.Settings.Default);
 
-    public static bool HighlightedOnly = false;
+    public static bool HighlightedOnly, Obfuscated;
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
@@ -91,6 +92,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         Highlighted.AddRange(config.Highlighted
             .Select(name => _nameMap[name])
             .ToList());
+        HighlightedOnly = config.HighlightedOnly;
+        Obfuscated = config.IsObfuscated;
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {
@@ -167,20 +170,22 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         // Check if the message can be parsed.
         string serialized;
-        if (_packetMap.TryGetValue(packet.CmdID, out var type)) {
+        if (!Obfuscated && _packetMap.TryGetValue(packet.CmdID, out var type)) {
             var decoded = packet.Body.ParseFrom(type) as IMessage;
             serialized = _formatter.Format(decoded) ?? "{}";
         } else {
-            var decoded = ProtoObject.Decode(packet.Body);
-            serialized = JsonSerializer.Serialize(decoded.ToFieldDictionary(), _options);
+            serialized = SerializeUnknown(packet.Body);
         }
 
         // Send the message to all connected clients.
+        var packetId = (ushort)packet.CmdID;
         var packetData = new PacketData {
             Time = Utils.CurrentTime(),
             Source = packet.Source.AsString(),
-            PacketId = (ushort)packet.CmdID,
-            PacketName = packet.CmdID.ToString(),
+            PacketId = packetId,
+            PacketName = Obfuscated ?
+                PacketUtils.NamePacket(packetId) :
+                packet.CmdID.ToString(),
             Length = (uint)packet.Body.Length,
             Data = serialized,
             RawData = Convert.ToBase64String(packet.Body)
@@ -204,11 +209,14 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var serialized = _formatter.Format(data) ?? "{}";
 
         // Send the message to all connected clients.
+        var packetId = (ushort)packet.CmdID;
         var packetData = new PacketData {
             Time = Utils.CurrentTime(),
             Source = packet.Source.AsString(),
-            PacketId = (ushort)packet.CmdID,
-            PacketName = packet.CmdID.ToString(),
+            PacketId = packetId,
+            PacketName = Obfuscated ?
+                PacketUtils.NamePacket(packetId) :
+                packet.CmdID.ToString(),
             Length = (uint)packet.Body.Length,
             Data = serialized,
             RawData = Convert.ToBase64String(packet.Body)
@@ -228,5 +236,53 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static bool ShowPacket(Packet packet) {
         if (HighlightedOnly && !Highlighted.Contains(packet.CmdID)) return false;
         return !Blacklisted.Contains(packet.CmdID);
+    }
+
+    /// <summary>
+    /// Serializes an unknown packet.
+    /// </summary>
+    private static string SerializeUnknown(byte[] data) {
+        var decoded = ProtoObject.Decode(data);
+        return JsonSerializer.Serialize(decoded.ToFieldDictionary(), _options);
+    }
+}
+
+internal static class PacketUtils {
+    private const string CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    /// <summary>
+    /// Generates a unique name for the packet.
+    /// </summary>
+    /// <param name="packetId">The packet's numerical identifier.</param>
+    /// <returns>A unique name for the packet.</returns>
+    public static string NamePacket(ushort packetId) {
+        var name = new StringBuilder();
+        var random = new Random(packetId);
+
+        for (var i = 0; i < 11; i++) {
+            name.Append(CHARS[random.Next(0, CHARS.Length)]);
+        }
+
+        var idName = "";
+        var idStr = packetId.ToString();
+        foreach (var c in idStr) {
+            var numerical = int.Parse(c.ToString());
+            var letter = 'A';
+            for (var i = 0; i < numerical; i++) {
+                letter = CHARS[random.Next(0, CHARS.Length)];
+            }
+
+            name.Append(letter);
+
+            // Append a direct translation of the ID -> name.
+            idName += CHARS[numerical];
+        }
+
+        name.Append(idName);
+
+        // Shorten the name to the last 11 characters.
+        return name.Length > 11 ?
+            name.ToString()[(name.Length - 11)..] :
+            name.ToString();
     }
 }
