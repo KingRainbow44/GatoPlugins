@@ -5,4 +5,5 @@
     Author = "KingRainbow44",
     Description = "Become the one who you love..",
     MainClass = "TheOtherTraveler.Plugin",
-    Version = "1.0")]
+    Version = "1.0",
+    Dependencies = ["Packando"])]
