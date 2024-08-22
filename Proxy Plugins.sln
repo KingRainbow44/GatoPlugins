@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packando", "Packando\Packan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoCooldown", "NoCooldown\NoCooldown.csproj", "{9CE7AF81-E0A7-4DDD-ADC3-62889F041DF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheOtherTraveler", "TheOtherTraveler\TheOtherTraveler.csproj", "{25B9DC77-143A-4DC9-B957-C5F575BE4803}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
