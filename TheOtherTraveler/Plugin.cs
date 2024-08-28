@@ -152,11 +152,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     [Handler(CmdID.SceneTeamUpdateNotify)]
     public static ValueTask<PacketResult> HandleSceneTeamUpdateNotify(Session session, PacketHead _,
         SceneTeamUpdateNotify msg) {
-        foreach (var avatar in msg.TeamInfo) {
-            var avatarInfo = avatar?.SceneEntityInfo?.Avatar;
+        foreach (var avatar in msg.SceneTeamAvatarList) {
+            var avatarInfo = avatar.AvatarInfo;
             if (avatarInfo is null) continue;
 
-            UpdateSceneAvatarInfo(avatarInfo);
+            UpdateAvatarInfo(avatarInfo);
         }
         return Intercept;
     }
