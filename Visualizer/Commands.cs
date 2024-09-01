@@ -4,7 +4,7 @@ using Common.Util;
 namespace Visualizer.Commands;
 
 public class Commands {
-    private const string VisualizerUsage = "visualizer <add|remove|highlight|unhighlight|show> <name|id|all|highlighted>";
+    private const string VisualizerUsage = "visualizer <save|add|remove|highlight|unhighlight|show> <name|id|all|highlighted>";
 
     [Command("visualizer", VisualizerUsage, "Change settings about the packet visualizer.")]
     public static async Task Visualizer(ICommandSender sender, string[] args) {
@@ -28,6 +28,10 @@ public class Commands {
 
         var value = GetCmdId(args[1]);
         switch (action) {
+            case "save":
+                Plugin.Instance?.Save();
+                await sender.SendMessage("Configuration file saved!");
+                return;
             case "add":
                 Plugin.Blacklisted.Add(value);
                 await sender.SendMessage($"Added {value} to the blacklist.");

@@ -47,7 +47,9 @@ public struct PacketData {
 }
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
-    private static readonly JsonSerializerOptions _options = new();
+    private static readonly JsonSerializerOptions _options = new() {
+        NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+    };
 
     private static readonly Dictionary<CmdID, Type> _packetMap = new();
     private static readonly Dictionary<string, CmdID> _nameMap = new();
@@ -55,14 +57,16 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private static readonly ArrayList _connections = ArrayList.Synchronized([]);
     private static readonly JsonFormatter _formatter = new(JsonFormatter.Settings.Default);
 
+    public static Plugin? Instance;
     public static bool HighlightedOnly, Obfuscated;
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
+    private Config _config = new();
     private WebSocketServer? _server;
 
     public override void OnLoad() {
-        _options.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+        Instance = this;
 
         // Initialize the packet map.
         AppDomain.CurrentDomain
@@ -85,19 +89,19 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         }
 
         // Read the configuration file.
-        var config = this.GetConfig(new Config());
-        Blacklisted.AddRange(config.Blacklisted
+        _config = this.GetConfig(new Config());
+        Blacklisted.AddRange(_config.Blacklisted
             .Select(name => _nameMap[name])
             .ToList());
-        Highlighted.AddRange(config.Highlighted
+        Highlighted.AddRange(_config.Highlighted
             .Select(name => _nameMap[name])
             .ToList());
-        HighlightedOnly = config.HighlightedOnly;
-        Obfuscated = config.IsObfuscated;
+        HighlightedOnly = _config.HighlightedOnly;
+        Obfuscated = _config.IsObfuscated;
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {
-            if (!config.EnableLogger) return;
+            if (!_config.EnableLogger) return;
 
             switch (level) {
                 case LogLevel.Debug:
@@ -116,7 +120,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                     throw new Exception("Unknown logging level.");
             }
         };
-        _server = new WebSocketServer($"ws://{config.BindAddress}:{config.BindPort}");
+        _server = new WebSocketServer($"ws://{_config.BindAddress}:{_config.BindPort}");
         _server.Start(OnClientConnected);
 
         // Register commands.
@@ -129,8 +133,27 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     }
 
     public override void OnUnload() {
+        Instance = null;
+
         _server?.ListenerSocket.Close();
         _server?.Dispose();
+    }
+
+    /// <summary>
+    /// Saves the configuration file.
+    /// </summary>
+    public void Save() {
+        // Update the config values.
+        _config.HighlightedOnly = HighlightedOnly;
+        _config.Highlighted = Highlighted
+            .Select(id => id.ToString())
+            .ToList();
+        _config.Blacklisted = Blacklisted
+            .Select(id => id.ToString())
+            .ToList();
+
+        // Save the config to the file.
+        this.SaveConfig(_config);
     }
 
     /// <summary>
