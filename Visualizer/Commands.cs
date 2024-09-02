@@ -8,49 +8,53 @@ public class Commands {
 
     [Command("visualizer", VisualizerUsage, "Change settings about the packet visualizer.")]
     public static async Task Visualizer(ICommandSender sender, string[] args) {
-        if (args.Length < 2) {
+        if (args.Length < 1) {
             await sender.SendMessage(VisualizerUsage);
             return;
         }
 
         var action = args[0].ToLower();
-        if (action == "show") {
-            var status = args[1].ToLower();
-            Plugin.HighlightedOnly = status switch {
-                "all" => false,
-                "highlighted" => true,
-                _ => Plugin.HighlightedOnly
-            };
-
-            await sender.SendMessage($"Visualizer will now show {(Plugin.HighlightedOnly ? "highlighted" : "all")} packets.");
-            return;
-        }
-
-        var value = GetCmdId(args[1]);
         switch (action) {
-            case "save":
+            case "show": {
+                var status = args[1].ToLower();
+                Plugin.HighlightedOnly = status switch {
+                    "all" => false,
+                    "highlighted" => true,
+                    _ => Plugin.HighlightedOnly
+                };
+
+                await sender.SendMessage($"Visualizer will now show {(Plugin.HighlightedOnly ? "highlighted" : "all")} packets.");
+                return;
+            }
+            case "save": {
                 Plugin.Instance?.Save();
                 await sender.SendMessage("Configuration file saved!");
                 return;
-            case "add":
-                Plugin.Blacklisted.Add(value);
-                await sender.SendMessage($"Added {value} to the blacklist.");
-                return;
-            case "remove":
-                Plugin.Blacklisted.Remove(value);
-                await sender.SendMessage($"Removed {value} from the blacklist.");
-                return;
-            case "highlight":
-                Plugin.Highlighted.Add(value);
-                await sender.SendMessage($"Added {value} to the highlighted list.");
-                return;
-            case "unhighlight":
-                Plugin.Highlighted.Remove(value);
-                await sender.SendMessage($"Removed {value} from the highlighted list.");
-                return;
-            default:
-                await sender.SendMessage(VisualizerUsage);
-                return;
+            }
+            default: {
+                var value = GetCmdId(args[1]);
+                switch (action) {
+                    case "add":
+                        Plugin.Blacklisted.Add(value);
+                        await sender.SendMessage($"Added {value} to the blacklist.");
+                        return;
+                    case "remove":
+                        Plugin.Blacklisted.Remove(value);
+                        await sender.SendMessage($"Removed {value} from the blacklist.");
+                        return;
+                    case "highlight":
+                        Plugin.Highlighted.Add(value);
+                        await sender.SendMessage($"Added {value} to the highlighted list.");
+                        return;
+                    case "unhighlight":
+                        Plugin.Highlighted.Remove(value);
+                        await sender.SendMessage($"Removed {value} from the highlighted list.");
+                        return;
+                    default:
+                        await sender.SendMessage(VisualizerUsage);
+                        return;
+                }
+            }
         }
     }
 
