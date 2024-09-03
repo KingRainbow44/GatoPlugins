@@ -5,4 +5,4 @@
     Author = "KingRainbow44",
     Description = "Packet interception library for plugins made easy.",
     MainClass = "Packando.Plugin",
-    Version = "1.0")]
+    Version = "1.1")]

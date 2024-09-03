@@ -8,22 +8,21 @@ using Google.Protobuf;
 
 namespace Packando;
 
+using HandlerType = (Handler, MethodInfo);
+
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     private readonly Dictionary<CmdID, Type> _packetMap = new();
-    private readonly Dictionary<CmdID, List<(SendType, MethodInfo)>> _handlers = new();
+    private readonly Dictionary<CmdID, List<HandlerType>> _handlers = new();
 
     /// <summary>
     /// Returns a list of handlers for a packet.
     /// </summary>
-    private List<(SendType, MethodInfo)> FindHandlers(CmdID packet) {
+    private List<HandlerType> FindHandlers(CmdID packet) {
         if (_handlers.TryGetValue(packet, out var handlers))
             return handlers;
 
         // Add a new list if one doesn't exist.
-        handlers = new List<(SendType, MethodInfo)>();
-        _handlers[packet] = handlers;
-
-        return handlers;
+        return _handlers[packet] = [];
     }
 
     public override void OnLoad() {
@@ -69,21 +68,20 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var attribute = info.GetCustomAttribute<Handler>();
         if (attribute is null) return;
 
-        RegisterHandler(attribute.ListenFor, attribute.PacketId, info);
+        RegisterHandler(attribute, info);
     }
 
     /// <summary>
     /// Registers a packet handler.
     /// </summary>
-    /// <param name="type">The type of packets to listen for.</param>
-    /// <param name="packetId">The ID of the packet.</param>
+    /// <param name="handler">The handler attribute.</param>
     /// <param name="invoker">The method info of the packet handler method.</param>
-    public void RegisterHandler(SendType type, CmdID packetId, MethodInfo invoker) {
-        var handlers = FindHandlers(packetId);
-        handlers.Add((type, invoker));
+    public void RegisterHandler(Handler handler, MethodInfo invoker) {
+        var handlers = FindHandlers(handler.PacketId);
+        handlers.Add((handler, invoker));
 
-        _handlers[packetId] = handlers;
-        Logger.Debug($"Registered handler for packet {packetId}.");
+        _handlers[handler.PacketId] = handlers;
+        Logger.Debug($"Registered handler for packet {handler.PacketId}.");
     }
 
     #endregion
@@ -91,18 +89,20 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     /// <summary>
     /// Invokes all packet handlers for a packet.
     /// </summary>
-    private async ValueTask<(PacketResult, IMessage?)> InvokeHandlers(
+    private async ValueTask<(PacketResult, IMessage?, bool)> InvokeHandlers(
         Session session, Packet packet, SendType type) {
         var result = PacketResult.Forward;
 
         // Parse the packet body.
         if (!_packetMap.TryGetValue(packet.CmdID, out var packetType)) {
-            return (PacketResult.Forward, null);
+            return (PacketResult.Forward, null, true);
         }
         var body = packet.Body.ParseFrom(packetType) as IMessage;
 
         // Invoke handlers.
-        foreach (var (sendType, handler) in FindHandlers(packet.CmdID)) {
+        var inject = true;
+        foreach (var (attribute, handler) in FindHandlers(packet.CmdID)) {
+            var sendType = attribute.ListenFor;
             if (sendType != SendType.All && sendType != type) continue;
 
             // The 'body' parameter is mutable between handlers.
@@ -113,11 +113,16 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             switch (await invokeResult) {
                 case PacketResult.Drop:
                     // We are ignoring the other handlers as someone chose to drop it.
-                    return (PacketResult.Drop, null);
+                    return (PacketResult.Drop, null, true);
                 case PacketResult.Intercept:
                     // The packet will be intercepted, it should not be changed.
                     if (result is PacketResult.Forward) {
                         result = PacketResult.Intercept;
+                    }
+
+                    // Check if the packet is 'injected'.
+                    if (inject && !attribute.Inject) {
+                        inject = false;
                     }
                     break;
                 case PacketResult.Forward:
@@ -126,11 +131,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             }
         }
 
-        return (result, body);
+        return (result, body, inject);
     }
 
     private async void OnReceivePacket(ReceivePacketEvent @event) {
-        var (result, body) = await InvokeHandlers(
+        var (result, body, inject) = await InvokeHandlers(
             @event.Session, @event.Packet, SendType.Server);
 
         switch (result) {
@@ -142,13 +147,18 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                 break;
             case PacketResult.Intercept when
                 body is not null:
-                @event.SetBody(body);
+                if (inject) {
+                    @event.InjectBody(body);
+                }
+                else {
+                    @event.SetBody(body);
+                }
                 break;
         }
     }
 
     private async void OnSendPacket(SendPacketEvent @event) {
-        var (result, body) = await InvokeHandlers(
+        var (result, body, _) = await InvokeHandlers(
             @event.Session, @event.Packet, SendType.Proxy);
 
         switch (result) {
