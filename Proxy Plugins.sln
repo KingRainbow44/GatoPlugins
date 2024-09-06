@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteStamina", "InfiniteStamina\InfiniteStamina.csproj", "{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\GatoProxy\Common\Common.csproj", "{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}"
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldSync", "WorldSync\WorldSync.csproj", "{E78AFD43-519F-40EC-A976-6C4E3D2D9609}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyClient", "..\GatoProxy\FreakyClient\FreakyClient.csproj", "{53B21F5D-041B-4B87-8716-140EB7408F1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeathSwap", "DeathSwap\DeathSwap.csproj", "{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{53B21F5D-041B-4B87-8716-140EB7408F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B21F5D-041B-4B87-8716-140EB7408F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B21F5D-041B-4B87-8716-140EB7408F1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
@@ -104,5 +110,6 @@ Global
 		{06A377A0-736B-4605-944D-7D74A1C70FE8} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
 		{9864044A-5E9E-4825-A468-DD496DD6948A} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
 		{E78AFD43-519F-40EC-A976-6C4E3D2D9609} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
+		{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
 	EndGlobalSection
 EndGlobal
