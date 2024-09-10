@@ -8,8 +8,6 @@ public static class Commands {
 
     [Command("swap", SwapUsage, "Death Swap game command.")]
     public static async Task Swap(ICommandSender sender, string[] args) {
-        var player = sender.IntoPlayer<DeathSwapPlayer>();
-
         if (args.Length == 0) {
             await sender.SendMessage($"Usage: {SwapUsage}");
             return;
@@ -22,19 +20,18 @@ public static class Commands {
                     return;
                 }
 
-                // Get the target player.
-                var target = args[1].ParsePlayer().As<DeathSwapPlayer>();
+                // Set the swap target.
+                Plugin.Source = sender.IntoPlayer<DeathSwapPlayer>();
+                Plugin.Target = args[1].ParsePlayer().As<DeathSwapPlayer>();
+                Plugin.Running = true;
 
-                await player.SendMessage("Sending token in 2.5s...");
-                await Task.Delay(2500);
-
-                // Swap the players.
-                Plugin.Override = true;
-                await player.SwapWith(target);
+                await sender.SendMessage("The game has now started!");
                 return;
             }
             case "stop": {
-                Plugin.Override = false;
+                Plugin.Running = false;
+
+                await sender.SendMessage("The game has stopped!");
                 return;
             }
             default: {

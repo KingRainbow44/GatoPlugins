@@ -8,7 +8,7 @@ namespace DeathSwap;
 public static class Handlers {
     [Handler(CmdID.GetPlayerTokenReq, Inject = true)]
     public static ValueTask<PacketResult> GetPlayerTokenReq(Session session, PacketHead _, GetPlayerTokenReq msg) {
-        if (Plugin.Override) {
+        if (Plugin.Running) {
             var @override = Plugin.Tokens[msg.AccountToken];
             msg.AccountUid = @override.AccountUid;
             msg.AccountToken = @override.AccountToken;
@@ -18,12 +18,19 @@ public static class Handlers {
             Plugin.Tokens[msg.AccountToken!] = msg;
             Plugin.Accounts[msg.AccountUid] = msg.AccountToken;
         }
+
         return ReturnValues.Intercept;
     }
 
     [Handler(CmdID.PlayerLoginReq)]
     public static ValueTask<PacketResult> PlayerLoginReq(Session session, PacketHead _, PlayerLoginReq msg) {
-        if (Plugin.Override) {
+        if (Plugin.Running) {
+            if (Plugin.Source is null) {
+                Plugin.Source = session.As<DeathSwapPlayer>();
+            } else if (Plugin.Target is null) {
+                Plugin.Target = session.As<DeathSwapPlayer>();
+            }
+
             var @override = Plugin.Logins[msg.Token];
             msg.DeviceInfo = @override.DeviceInfo;
             msg.DeviceName = @override.DeviceName;
