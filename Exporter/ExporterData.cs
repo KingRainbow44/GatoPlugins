@@ -24,11 +24,11 @@ public class ExporterData(Player player, Session _) : IPlayerData {
         // Resolve avatar info.
         var propMap = avatar.PropMap;
         var talentMap = avatar.SkillLevelMap;
-        var @object = new Character {
+         var @object = new Character {
             Key = GoodHelper.Convert(GameData.TextMap[gameData.NameTextMapHash]),
             Level = (uint) propMap[(uint) PlayerProperty.PROP_LEVEL].Val,
             Ascension = (ushort) propMap[(uint) PlayerProperty.PROP_BREAK_LEVEL].Val,
-            Constellation = 0, // TODO: Resolve constellation level.
+            Constellation = (ushort) avatar.TalentIdList.Count,
             Talent = {
                 {"auto", (ushort) talentMap[skillData.Skills[0]]},
                 {"skill", (ushort) talentMap[skillData.Skills[1]]},
@@ -48,17 +48,17 @@ public class ExporterData(Player player, Session _) : IPlayerData {
 
         foreach (var guid in avatar.EquipGuidList) {
             if (_data.Artifacts is { } artifacts) {
-                artifacts
-                    .Where(a => a.Guid.Equals(guid))
-                    .ToList()
-                    .ForEach(a => a.Location = key);
+                var artifact = artifacts.Find(a => a.Guid.Equals(guid));
+                if (artifact is not null) {
+                    artifact.Location = key;
+                }
             }
 
             if (_data.Weapons is { } weapons) {
-                weapons
-                    .Where(w => w.Guid.Equals(guid))
-                    .ToList()
-                    .ForEach(w => w.Location = key);
+                var weapon = weapons.Find(w => w.Guid.Equals(guid));
+                if (weapon is not null) {
+                    weapon.Location = key;
+                }
             }
         }
     }
@@ -86,14 +86,14 @@ public class ExporterData(Player player, Session _) : IPlayerData {
         _data.Artifacts ??= [];
 
         // Look-up artifact game data.
+        var relic = item.Reliquary;
         var gameData = GameData.ReliquaryData[itemId];
-        var mainPropData = GameData.ReliquaryMainPropData[gameData.MainPropDepotId];
+        var mainPropData = GameData.ReliquaryMainPropData[relic.MainPropId];
 
         // Skip < Epic artifacts.
         if (gameData.RankLevel < 3) return;
 
         // Resolve artifact info.
-        var relic = item.Reliquary;
         var @object = new Artifact {
             SetKey = Plugin.RelicSetNames[gameData.SetId],
             SlotKey = GoodHelper.Convert(gameData.EquipType),
@@ -138,11 +138,17 @@ public class ExporterData(Player player, Session _) : IPlayerData {
 
         // Resolve weapon info.
         var weapon = item.Weapon;
+
+        var refinement = (ushort) 0;
+        if (weapon.AffixMap.Count > 0) {
+            refinement = (ushort)(Convert.ToUInt16(weapon.AffixMap.Values.First()) + 1);
+        }
+
         var @object = new Weapon {
             Key = GoodHelper.Convert(GameData.TextMap[gameData.NameTextMapHash]),
             Level = weapon.Level,
             Ascension = (ushort) weapon.PromoteLevel,
-            Refinement = (ushort) (Convert.ToUInt16(weapon.AffixMap[0]) + 1),
+            Refinement = refinement,
             Location = "",
             Guid = guid,
             Lock = item.IsLocked
@@ -175,7 +181,7 @@ public class ExporterData(Player player, Session _) : IPlayerData {
             File.Delete(fileInfo.FullName);
         }
 
-        var stream = new FileStream(fileInfo.FullName, FileMode.Create);
-        await JsonSerializer.SerializeAsync(stream, _data, Plugin.JsonOptions);
+        var serialized = JsonSerializer.Serialize(_data, Plugin.JsonOptions);
+        await File.WriteAllTextAsync(fileInfo.FullName, serialized);
     }
 }

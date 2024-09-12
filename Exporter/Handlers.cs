@@ -20,8 +20,13 @@ public static class Handlers {
     public static ValueTask<PacketResult> AvatarDataNotify(Session session, PacketHead _, AvatarDataNotify msg) {
         var export = session.Data<ExporterData>();
         foreach (var avatar in msg.AvatarList) {
-            if (avatar is null) continue;
-            export.AddAvatar(avatar);
+            try {
+                if (avatar is null) continue;
+                export.AddAvatar(avatar);
+            }
+            catch (Exception) {
+                // This exception is probably from the Traveler.
+            }
         }
 
         return ReturnValues.Forward;

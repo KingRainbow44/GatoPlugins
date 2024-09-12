@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+using Common.Util;
 using FreakyProxy;
 using FreakyProxy.Data;
 
@@ -16,6 +16,9 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static string OutputDirectory { get; private set; } = "";
 
     public override void OnLoad() {
+        // Register commands.
+        CommandProcessor.RegisterAllCommands("Exporter");
+
         // Create the export data format.
         OutputDirectory = Path.Join(DataDirectory.FullName, "exports");
         if (!Directory.Exists(OutputDirectory)) {

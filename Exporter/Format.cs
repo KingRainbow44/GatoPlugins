@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.RegularExpressions;
 using Common.DataStructures;
 
@@ -11,7 +12,18 @@ public static partial class GoodHelper {
     /// Converts a name to pascal case.
     /// </summary>
     public static string Convert(string name) {
-        return string.Concat(NameRegex().Matches(name));
+        var parsed = string.Concat(NameRegex().Matches(name));
+
+        // Now we need to convert the string to PascalCase.
+        var builder = new StringBuilder();
+        foreach (var word in parsed.Split(' ')) {
+            if (word.Length == 0) continue;
+
+            builder.Append(char.ToUpperInvariant(word[0]));
+            builder.Append(word[1..]);
+        }
+
+        return builder.ToString();
     }
 
     /// <summary>
@@ -56,7 +68,7 @@ public static partial class GoodHelper {
         };
     }
 
-    [GeneratedRegex("[A-z]")]
+    [GeneratedRegex("[A-z ]")]
     private static partial Regex NameRegex();
 }
 
@@ -67,61 +79,61 @@ public class GoodFormat {
     /// <summary>
     /// This is a constant which is always 'GOOD'.
     /// </summary>
-    public readonly string Format = "GOOD";
+    public string Format { get; } = "GOOD";
 
     /// <summary>
     /// This is a constant which is always 'GatoProxy'.
     /// </summary>
-    public readonly string Source = "GatoProxy";
+    public string Source { get; } = "GatoProxy";
 
     /// <summary>
     /// This is a constant which is always '2'.
     /// </summary>
-    public readonly uint Version = 2;
+    public uint Version { get; } = 2;
 
     /// <summary>
     /// A list of avatar/character objects.
     /// </summary>
-    public List<Character>? Characters;
+    public List<Character>? Characters { get; set; }
 
     /// <summary>
     /// A list of relic/artifact objects.
     /// </summary>
-    public List<Artifact>? Artifacts;
+    public List<Artifact>? Artifacts { get; set; }
 
     /// <summary>
     /// A list of weapon objects.
     /// </summary>
-    public List<Weapon>? Weapons;
+    public List<Weapon>? Weapons { get; set; }
 
     /// <summary>
     /// A dictionary of materials.
-    /// Key = Material Name
-    /// Value = Quantity
+    /// Key { get; set; } = Material Name
+    /// Value { get; set; } = Quantity
     /// </summary>
-    public Dictionary<string, uint>? Materials;
+    public Dictionary<string, uint>? Materials { get; set; }
 }
 
-public struct Character {
+public class Character {
     /// <summary>
     /// The avatar name.
     /// </summary>
-    public string Key = "Rosaria";
+    public string Key { get; set; } = "Rosaria";
 
     /// <summary>
     /// The avatar's level.
     /// </summary>
-    public uint Level = 1;
+    public uint Level { get; set; } = 1;
 
     /// <summary>
     /// The avatar's constellation level.
     /// </summary>
-    public ushort Constellation = 0;
+    public ushort Constellation { get; set; } = 0;
 
     /// <summary>
     /// The avatar's ascension level.
     /// </summary>
-    public ushort Ascension = 0;
+    public ushort Ascension { get; set; } = 0;
 
     /// <summary>
     /// The avatar's talent levels.
@@ -129,116 +141,108 @@ public struct Character {
     /// Value is inclusive 1-15.
     /// Does not include constellation boosts.
     /// </summary>
-    public readonly Dictionary<string, ushort> Talent = new() {
-        {"auto", 1},
-        {"skill", 1},
-        {"burst", 1}
+    public Dictionary<string, ushort> Talent { get; set; } = new() {
+        // {"auto", 1},
+        // {"skill", 1},
+        // {"burst", 1}
     };
-
-    public Character() { }
 }
 
-public struct SubStat {
+public class SubStat {
     /// <summary>
     /// The statistic key.
     /// </summary>
-    public string Key = "critDMG_";
+    public string Key { get; set; } = "critDMG_";
 
     /// <summary>
     /// The statistic value.
     /// </summary>
-    public float Value = 19.4f;
-
-    public SubStat() { }
+    public float Value { get; set; } = 19.4f;
 }
 
-public struct Artifact {
+public class Artifact {
     /// <summary>
     /// The artifact set type.
     /// </summary>
-    public string SetKey = "GladiatorsFinale";
+    public string SetKey { get; set; } = "GladiatorsFinale";
 
     /// <summary>
     /// The artifact slot type.
     /// </summary>
-    public string SlotKey = "plume";
+    public string SlotKey { get; set; } = "plume";
 
     /// <summary>
     /// The artifact's level.
     /// </summary>
-    public uint Level = 0;
+    public uint Level { get; set; } = 0;
 
     /// <summary>
     /// The artifact's rarity.
     /// Value is inclusive 1-5.
     /// </summary>
-    public ushort Rarity = 1;
+    public ushort Rarity { get; set; } = 1;
 
     /// <summary>
     /// The artifact's main statistic type.
     /// </summary>
-    public string MainStatKey = "critDMG_";
+    public string MainStatKey { get; set; } = "critDMG_";
 
     /// <summary>
     /// The avatar which this artifact is equipped to.
     /// An empty string correlates to not equipped.
     /// </summary>
-    public string Location = "";
+    public string Location { get; set; } = "";
 
     /// <summary>
     /// An internal value used by the game for differentiating game objects.
     /// </summary>
-    public ulong Guid = 0;
+    public ulong Guid { get; set; } = 0;
 
     /// <summary>
     /// Whether the artifact is locked.
     /// </summary>
-    public bool Lock = false;
+    public bool Lock { get; set; } = false;
 
     /// <summary>
     /// A list of the artifact's other statistics.
     /// </summary>
-    public List<SubStat> Substats = [];
-
-    public Artifact() { }
+    public List<SubStat> Substats { get; set; } = [];
 }
 
-public struct Weapon {
+public class Weapon {
     /// <summary>
     /// The weapon name.
     /// </summary>
-    public string Key = "CrescentPike";
+    public string Key { get; set; } = "CrescentPike";
 
     /// <summary>
     /// The weapon's level.
     /// </summary>
-    public uint Level = 1;
+    public uint Level { get; set; } = 1;
 
     /// <summary>
     /// The weapon's ascension level.
     /// </summary>
-    public ushort Ascension = 0;
+    public ushort Ascension { get; set; } = 0;
 
     /// <summary>
     /// The weapon's refinement level.
     /// </summary>
-    public ushort Refinement = 1;
+    public ushort Refinement { get; set; } = 1;
 
     /// <summary>
     /// The avatar which this weapon is equipped to.
     /// An empty string correlates to not equipped.
     /// </summary>
-    public string Location = "";
+    public string Location { get; set; } = "";
 
     /// <summary>
     /// An internal value used by the game for differentiating game objects.
     /// </summary>
-    public ulong Guid = 0;
+    public ulong Guid { get; set; } = 0;
 
     /// <summary>
     /// Whether the weapon is locked.
     /// </summary>
-    public bool Lock = false;
-
-    public Weapon() { }
+    public bool Lock { get; set; } = false;
 }
