@@ -71,10 +71,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         var config = Instance._config = Instance.GetConfig(new Config());
         Blacklisted.AddRange(config.Blacklisted
-            .Select(name => _nameMap[name])
+            .Select(name => _nameMap.TryGetValue(name, out var id) ? id : CmdID.Unknown)
             .ToList());
         Highlighted.AddRange(config.Highlighted
-            .Select(name => _nameMap[name])
+            .Select(name => _nameMap.TryGetValue(name, out var id) ? id : CmdID.Unknown)
             .ToList());
         HighlightedOnly = config.HighlightedOnly;
         Obfuscated = config.IsObfuscated;
