@@ -153,10 +153,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static ValueTask<PacketResult> HandleSceneTeamUpdateNotify(Session session, PacketHead _,
         SceneTeamUpdateNotify msg) {
         foreach (var avatar in msg.SceneTeamAvatarList) {
-            var avatarInfo = avatar.AvatarInfo;
+            var avatarInfo = avatar?.SceneEntityInfo?.Avatar;
             if (avatarInfo is null) continue;
 
-            UpdateAvatarInfo(avatarInfo);
+            UpdateSceneAvatarInfo(avatarInfo);
         }
         return Intercept;
     }
