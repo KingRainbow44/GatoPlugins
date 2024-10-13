@@ -62,6 +62,26 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public static readonly List<CmdID> Highlighted = [];
     public static readonly List<CmdID> Blacklisted = [];
 
+    /// <summary>
+    /// Loads the configuration file.
+    /// </summary>
+    /// <exception cref="Exception"></exception>
+    public static void LoadConfig() {
+        if (Instance is null) throw new Exception("Instance cannot be null.");
+
+        var config = Instance._config = Instance.GetConfig(new Config());
+        Blacklisted.AddRange(config.Blacklisted
+            .Select(name => _nameMap[name])
+            .ToList());
+        Highlighted.AddRange(config.Highlighted
+            .Select(name => _nameMap[name])
+            .ToList());
+        HighlightedOnly = config.HighlightedOnly;
+        Obfuscated = config.IsObfuscated;
+
+        Instance.Logger.Info("Visualizer config has been loaded!");
+    }
+
     private Config _config = new();
     private WebSocketServer? _server;
 
@@ -89,15 +109,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         }
 
         // Read the configuration file.
-        _config = this.GetConfig(new Config());
-        Blacklisted.AddRange(_config.Blacklisted
-            .Select(name => _nameMap[name])
-            .ToList());
-        Highlighted.AddRange(_config.Highlighted
-            .Select(name => _nameMap[name])
-            .ToList());
-        HighlightedOnly = _config.HighlightedOnly;
-        Obfuscated = _config.IsObfuscated;
+        LoadConfig();
 
         // Start the web socket server
         FleckLog.LogAction = (level, message, _) => {

@@ -31,6 +31,11 @@ public class Commands {
                 await sender.SendMessage("Configuration file saved!");
                 return;
             }
+            case "reload": {
+                Plugin.LoadConfig();
+                await sender.SendMessage("Reloaded the configuration!");
+                return;
+            }
             default: {
                 var value = GetCmdId(args[1]);
                 switch (action) {
