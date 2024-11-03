@@ -16,9 +16,9 @@ public static class Handlers {
         // For every avatar, remove the cooldown on all skills.
         foreach (var avatar in msg.SceneTeamAvatarList) {
             var packet = new AvatarFightPropNotify {
-                AvatarGuid = avatar.AvatarGuid
+                AvatarGuid = avatar.AvatarGuid,
+                FightPropMap = { {80, 1} }
             };
-            packet.FightPropMap.Add(80, 1);
 
             await session.SendClient(CmdID.AvatarFightPropNotify, packet);
         }
