@@ -5,4 +5,4 @@
     Author = "KingRainbow44",
     Description = "Teleport to map markers.",
     MainClass = "MapTeleport.Plugin",
-    Version = "1.0")]
+    Version = "1.1")]

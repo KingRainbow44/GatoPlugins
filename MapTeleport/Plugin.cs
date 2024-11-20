@@ -5,7 +5,7 @@ using Common.Protocol.Proto;
 using Common.Util;
 using FreakyProxy;
 using FreakyProxy.Events;
-using static Common.Protocol.Proto.MapMarkReq.Types.Operation;
+using static Common.Protocol.Proto.MarkMapReq.Types.Operation;
 
 namespace MapTeleport;
 
@@ -16,11 +16,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         Logger.Info("Map Teleport plugin loaded.");
     }
 
-    private static void OnReceivePacket(ReceivePacketEvent @event) {
+    private static async Task OnReceivePacket(ReceivePacketEvent @event) {
         var packet = @event.Packet;
-        if (packet.CmdID != CmdID.MapMarkReq) return;
+        if (packet.CmdID != CmdID.MarkMapReq) return;
 
-        var msg = packet.Body.ParseFrom<MapMarkReq>()!;
+        var msg = packet.Body.ParseFrom<MarkMapReq>()!;
         if (msg.Operation is not (Add or Mod)) return;
 
         var mark = msg.Mark;
@@ -37,6 +37,6 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             Z = mark.Pos.Z
         };
 
-        @event.Session.Player.Teleport(position, mark.SceneId);
+        await @event.Session.Player.Teleport(position, mark.SceneId);
     }
 }
