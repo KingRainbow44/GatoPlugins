@@ -26,9 +26,11 @@ public static class Sync {
     /// <summary>
     /// Creates an avatar clone for a player.
     /// </summary>
+    /// <param name="receiver">The player to receive the hallucination.</param>
+    /// <param name="owner">The player which owns the source avatar.</param>
+    /// <param name="avatar">The source avatar to copy and send to the receiver.</param>
     public static Avatar CloneAvatar(Player receiver, Player owner, Avatar avatar) {
         var world = receiver.World.NotNull("Player does not have a world");
-        var scene = receiver.Scene.NotNull("Player is not in a scene");
 
         // Generate avatar IDs.
         var copyAvatarId = world.NextEntityId(ProtEntityType.ProtEntityAvatar);
@@ -57,10 +59,6 @@ public static class Sync {
             EntityId = copyAvatarId
         };
 
-        // Spawn the entity.
-        var newAvatar = new Avatar(entityCopy);
-        scene.AddEntity(newAvatar);
-
-        return newAvatar;
+        return new Avatar(entityCopy);
     }
 }
