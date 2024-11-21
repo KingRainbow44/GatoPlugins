@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeathSwap", "DeathSwap\Deat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Exporter\Exporter.csproj", "{4F42C29D-B5A6-460C-8188-51CFE98EB1BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyServer", "..\GatoProxy\FreakyServer\FreakyServer.csproj", "{48026C98-3D7C-4466-B762-DCDA1D07CAE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{4F42C29D-B5A6-460C-8188-51CFE98EB1BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F42C29D-B5A6-460C-8188-51CFE98EB1BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F42C29D-B5A6-460C-8188-51CFE98EB1BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48026C98-3D7C-4466-B762-DCDA1D07CAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48026C98-3D7C-4466-B762-DCDA1D07CAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48026C98-3D7C-4466-B762-DCDA1D07CAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48026C98-3D7C-4466-B762-DCDA1D07CAE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC} = {25D72CA1-EEB0-419D-A8EC-798C24A114BB}
