@@ -21,7 +21,7 @@ public static class Commands {
         try {
             var value = args[0].ParseBool() ? 1 : 0;
             foreach (var avatar in session.AvatarModule.Avatars) {
-                var packet = new AvatarFightPropNotify {
+                var packet = new AvatarFightPropUpdateNotify {
                     AvatarGuid = avatar.AvatarGuid
                 };
                 packet.FightPropMap.Add(80, value);
