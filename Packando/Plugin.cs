@@ -106,11 +106,23 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             if (sendType != SendType.All && sendType != type) continue;
 
             // The 'body' parameter is mutable between handlers.
-            if (handler.Invoke(null, [session, packet.Metadata, body])
-                is not ValueTask<PacketResult> invokeResult) continue;
+            // Await the handler's resulting value if required.
+            PacketResult invokeResult;
+
+            var handlerResult = handler.Invoke(null, [session, packet.Metadata, body]);
+            if (handlerResult is ValueTask<PacketResult> invokeTask) {
+                invokeResult = await invokeTask;
+            }
+            else if (handlerResult is PacketResult packetResult) {
+                invokeResult = packetResult;
+            }
+            else {
+                Logger.Warn($"Invalid packet handler result while invoking for {packet.CmdID}");
+                continue;
+            }
 
             // Validate the result.
-            switch (await invokeResult) {
+            switch (invokeResult) {
                 case PacketResult.Drop:
                     // We are ignoring the other handlers as someone chose to drop it.
                     return (PacketResult.Drop, null, true);
