@@ -27,18 +27,21 @@ for await (const plugin of plugins.scan({ onlyFiles: false })) {
 
 await (async () => {
     if (otherFile) {
-        const artifact = Bun.file(otherFile);
-        if (!await artifact.exists()) return;
+        const files = otherFile.split(",");
+        for (const file of files) {
+            const artifact = Bun.file(file);
+            if (!await artifact.exists()) return;
 
-        const split = otherFile.split("/");
-        const fileName = split[split.length - 1];
+            const split = file.split("/");
+            const fileName = split[split.length - 1];
 
-        // Copy to `dist/artifact` directory.
-        await Bun.write(`dist/${fileName}`, artifact);
+            // Copy to `dist/artifact` directory.
+            await Bun.write(`dist/${fileName}`, artifact);
 
-        if (otherDir) {
-            // Copy to `dist/otherDir/artifact` directory.
-            await Bun.write(`${otherDir}/${fileName}`, artifact);
+            if (otherDir) {
+                // Copy to `dist/otherDir/artifact` directory.
+                await Bun.write(`${otherDir}/${fileName}`, artifact);
+            }
         }
     }
 })();
