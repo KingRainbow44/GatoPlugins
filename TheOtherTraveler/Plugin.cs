@@ -105,6 +105,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         var oldDepotId = info.SkillDepotId;
         var depotIndex = oldAvatarConfig.CandSkillDepotIds.IndexOf(oldDepotId);
+        if (depotIndex == -1) {
+            _instance?.Logger.Error($"Skill depot ID {oldDepotId} not found for avatar {oldAvatarId}.");
+            return;
+        }
 
         // Now that we have the index for the old avatar, we need to find the new one.
         // We do this by getting the candidate skill depot IDs for the new avatar and
