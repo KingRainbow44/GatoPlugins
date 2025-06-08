@@ -1,8 +1,8 @@
 import { Glob } from "bun";
 import { readdir } from "node:fs/promises";
 
+const releaseMode = (process.env["RELEASE_MODE"] || "true") == "true";
 const otherDir = process.env["FINAL_COPY"] || undefined;
-
 const otherFile = process.env["OTHER_FILE"] || undefined;
 
 const plugins = new Glob("*");
@@ -10,7 +10,7 @@ for await (const plugin of plugins.scan({ onlyFiles: false })) {
     try {
         await readdir(plugin);
 
-        const artifact = Bun.file(`${plugin}/bin/Release/net8.0/${plugin}.dll`);
+        const artifact = Bun.file(`${plugin}/bin/${releaseMode ? "Release" : "Debug"}/net8.0/${plugin}.dll`);
         if (!await artifact.exists()) continue;
 
         // Copy to `dist/artifact` directory.
