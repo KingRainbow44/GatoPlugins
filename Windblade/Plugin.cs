@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using Common.Protocol;
 using Common.Protocol.Proto;
@@ -44,7 +44,7 @@ public static class Windblade {
 
             // Execute the script.
             var packet = new PlayerNormalLuaShellNotify {
-                Payload = ByteString.CopyFrom(bytecode)
+                Luashell = ByteString.CopyFrom(bytecode)
             };
             await session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
 
@@ -73,7 +73,7 @@ public static class Windblade {
     /// </summary>
     public static async void Execute(Session session, byte[] payload) {
         var packet = new PlayerNormalLuaShellNotify {
-            Payload = ByteString.CopyFrom(payload)
+            Luashell = ByteString.CopyFrom(payload)
         };
         await session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
     }
