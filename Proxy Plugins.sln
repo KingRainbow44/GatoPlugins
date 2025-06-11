@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 #
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteStamina", "InfiniteStamina\InfiniteStamina.csproj", "{DDDC2CCD-9A95-42D4-8DC9-25E92AC544EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\GatoProxy\Common\Common.csproj", "{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\GatoProxy\Source\Common\Common.csproj", "{F9F4EE1F-A8FF-44E0-9603-355C51AE6782}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapTeleport", "MapTeleport\MapTeleport.csproj", "{69E04A96-6F9B-4D70-B9CD-95F273EEADB4}"
 EndProject
@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windblade", "Windblade\Wind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIDHider", "UIDHider\UIDHider.csproj", "{74551E2F-71D2-4FDB-91FC-172FB96C1BAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyProxy", "..\GatoProxy\FreakyProxy\FreakyProxy.csproj", "{B124762F-77AE-4FE1-841D-FFF4DDE8C73F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyProxy", "..\GatoProxy\Source\FreakyProxy\FreakyProxy.csproj", "{B124762F-77AE-4FE1-841D-FFF4DDE8C73F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "..\GatoProxy\CodeGenerator\CodeGenerator.csproj", "{14EC2687-6FDB-42D9-89D4-04B2B218C35E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "..\GatoProxy\Source\CodeGenerator\CodeGenerator.csproj", "{14EC2687-6FDB-42D9-89D4-04B2B218C35E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KcpTransport", "..\GatoProxy\KcpTransport\KcpTransport.csproj", "{8692C714-6486-4397-A1BE-D8208B1634FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KcpTransport", "..\GatoProxy\Source\KcpTransport\KcpTransport.csproj", "{8692C714-6486-4397-A1BE-D8208B1634FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packando", "Packando\Packando.csproj", "{2A4894A3-8032-4B7A-A7B2-78F208C4D37C}"
 EndProject
@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{25D7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldSync", "WorldSync\WorldSync.csproj", "{E78AFD43-519F-40EC-A976-6C4E3D2D9609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyClient", "..\GatoProxy\FreakyClient\FreakyClient.csproj", "{53B21F5D-041B-4B87-8716-140EB7408F1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyClient", "..\GatoProxy\Plugins\Gato\FreakyClient\FreakyClient.csproj", "{53B21F5D-041B-4B87-8716-140EB7408F1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeathSwap", "DeathSwap\DeathSwap.csproj", "{347DDFF3-8A05-49D6-A8E2-3FF00AE0420B}"
 EndProject
@@ -37,9 +37,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Exporter\Export
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChecksumBypass", "ChecksumBypass\ChecksumBypass.csproj", "{3C373767-4250-49F0-BA99-A3F3D8CCBE11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyServer", "..\GatoProxy\FreakyServer\FreakyServer.csproj", "{48026C98-3D7C-4466-B762-DCDA1D07CAE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreakyServer", "..\GatoProxy\Plugins\Gato\FreakyServer\FreakyServer.csproj", "{48026C98-3D7C-4466-B762-DCDA1D07CAE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patchless", "..\GatoProxy\Patchless\Patchless.csproj", "{856AA656-132D-4C7F-9C9F-C4267E5D5C8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patchless", "..\GatoProxy\Plugins\Gato\Patchless\Patchless.csproj", "{856AA656-132D-4C7F-9C9F-C4267E5D5C8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

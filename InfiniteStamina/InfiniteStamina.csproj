@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\GatoProxy\FreakyProxy\FreakyProxy.csproj" />
+        <ProjectReference Include="..\..\GatoProxy\Source\FreakyProxy\FreakyProxy.csproj" />
     </ItemGroup>
 
 </Project>
