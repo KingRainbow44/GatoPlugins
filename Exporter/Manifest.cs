@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 1,
+[assembly: PluginManifest(ManifestVersion = 2,
     Name = "Exporter",
     Author = "KingRainbow44",
     Description = "Export your inventory data in the Genshin Open Object Data format!",

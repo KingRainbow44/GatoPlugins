@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 1,
+[assembly: PluginManifest(ManifestVersion = 2,
     Name = "Visualizer",
     Author = "KingRainbow44",
     Description = "Visualize packets in a convenient way.",

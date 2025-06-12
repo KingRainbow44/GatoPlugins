@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 1,
+[assembly: PluginManifest(ManifestVersion = 2,
     Name = "WorldSync",
     Author = "KingRainbow44",
     Description = "Synchronize the worlds of players.",

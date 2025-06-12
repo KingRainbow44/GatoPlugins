@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 1,
+[assembly: PluginManifest(ManifestVersion = 2,
     Name = "Death Swap",
     Author = "KingRainbow44",
     Description = "Try to kill the other player after swapping!",
