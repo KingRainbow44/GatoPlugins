@@ -1,4 +1,4 @@
-﻿// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedType.Global
 
 using System.Collections;
 using System.Text;
@@ -103,6 +103,22 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                 }
             });
 
+        var typeDict = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .First(t => t.GetName().Name == "Common").GetTypes()
+            .Where(t => t.Namespace == "Common.Protocol.Proto")
+            .ToList();
+
+        // Second pass
+        foreach (var name in Enum.GetNames<CmdID>()) {
+            var value = (CmdID)Enum.Parse(typeof(CmdID), name);
+            var t = typeDict.FirstOrDefault(t => t.Name == name);
+            if (t != null && !_packetMap.ContainsKey(value)) {
+                _packetMap.Add(value, t);
+            }
+        }
+
+        // Load CmdIDs
         foreach (var name in Enum.GetNames<CmdID>()) {
             var value = (CmdID)Enum.Parse(typeof(CmdID), name);
             _nameMap.Add(name, value);
