@@ -160,7 +160,7 @@ public class SynchronizedWorld : World {
     private async Task SyncTeam() {
         // Each player has a unique SceneTeamUpdate notify packet.
         // The avatars for other players need to match with the peer IDs assigned.
-        foreach (var player in this) {
+        foreach (var player in Players) {
             var sceneTeamPacket = new SceneTeamUpdateNotify { IsInMp = true };
 
             // For the player's own avatars, they can be added without modification.

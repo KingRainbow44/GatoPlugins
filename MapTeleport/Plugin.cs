@@ -37,6 +37,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             Z = mark.Pos.Z
         };
 
-        await @event.Session.Player.Teleport(position, mark.SceneId);
+        var player = @event.Session.Player;
+        if (player.SelectedAvatar is { } avatar) {
+            // TODO: Implement cross-scene teleportation.
+            await avatar.Teleport(position);
+        }
     }
 }
