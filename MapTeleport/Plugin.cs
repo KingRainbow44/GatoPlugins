@@ -21,7 +21,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         if (packet.CmdID != CmdID.MarkMapReq) return;
 
         var msg = packet.Body.ParseFrom<MarkMapReq>()!;
-        if (msg.Operation is not (Add or Mod)) return;
+        if (msg.Op is not (Add or Mod)) return;
 
         var mark = msg.Mark;
         if (mark.PointType is not MapMarkPointType.FishPool) return;
