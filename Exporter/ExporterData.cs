@@ -7,8 +7,11 @@ using FreakyProxy.PacketProcessor;
 
 namespace Exporter;
 
-public class ExporterData(Player player, Session _) : IPlayerData {
+public class ExporterData(Player player, Session session) : IPlayerData {
     private readonly GoodFormat _data = new();
+    public Player Player => player;
+    public Session Session => session;
+
 
     /// <summary>
     /// Converts an 'AvatarInfo' message into a GOOD character object.
