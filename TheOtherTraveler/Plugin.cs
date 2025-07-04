@@ -67,7 +67,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             info.SkillLevelMap[id] = 1);
 
         info.InherentProudSkillList.Clear();
-        skillDepot.ConstellationSkills
+        skillDepot.PassiveSkills
             .Where(data => data.ProudSkillGroupId > 0)
             .Where(data => data.NeedAvatarPromoteLevel < promoteLevel.Val)
             .Select(data => data.ProudSkillGroupId * 100 + 1)
@@ -122,7 +122,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             info.SkillLevelMap[id] = 1);
 
         info.InherentProudSkillList.Clear();
-        skillDepot.ConstellationSkills
+        skillDepot.PassiveSkills
             .Where(data => data.ProudSkillGroupId > 0)
             .Select(data => data.ProudSkillGroupId * 100 + 1)
             .ToList()
