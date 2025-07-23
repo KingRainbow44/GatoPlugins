@@ -11,7 +11,8 @@ public static class Commands {
     [Command("cooldown", CooldownUsage, "Enables or disables cooldowns.",
         Aliases = ["cd", "skillcd"])]
     public static async Task Cooldown(ICommandSender sender, string[] args) {
-        var session = sender.AsPlayer().Session;
+        var player = sender.AsPlayer();
+        var session = player.Session;
 
         if (args.Length < 1) {
             await sender.SendMessage($"Usage: {CooldownUsage}");
@@ -20,9 +21,9 @@ public static class Commands {
 
         try {
             var value = args[0].ParseBool() ? 1 : 0;
-            foreach (var avatar in session.AvatarModule.Avatars) {
+            foreach (var avatar in player.TeamManager.Avatars) {
                 var packet = new AvatarFightPropUpdateNotify {
-                    AvatarGuid = avatar.AvatarGuid
+                    AvatarGuid = avatar.Guid
                 };
                 packet.FightPropMap.Add(80, value);
 
