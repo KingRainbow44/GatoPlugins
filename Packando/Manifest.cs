@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 2,
+[assembly: PluginManifest(ManifestVersion = 3,
     Name = "Packando",
     Author = "KingRainbow44",
     Description = "Packet interception library for plugins made easy.",
