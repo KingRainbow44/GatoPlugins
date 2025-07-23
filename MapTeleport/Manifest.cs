@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 2,
+[assembly: PluginManifest(ManifestVersion = 3,
     Name = "MapTeleport",
     Author = "KingRainbow44",
     Description = "Teleport to map markers.",

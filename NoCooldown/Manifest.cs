@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 2,
+[assembly: PluginManifest(ManifestVersion = 3,
     Name = "No Cooldown",
     Author = "KingRainbow44",
     Description = "Removes the cooldown on skills.",

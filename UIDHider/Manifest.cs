@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 2,
+[assembly: PluginManifest(ManifestVersion = 3,
     Name = "UIDHider",
     Author = "KingRainbow44",
     Description = "Hides your UID from the screen.",
