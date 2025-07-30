@@ -29,7 +29,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         // Load all message types.
         AppDomain.CurrentDomain
             .GetAssemblies()
-            .First(t => t.GetName().Name == "Common").GetTypes()
+            .First(t => t.GetName().Name == "Protocol").GetTypes()
             .Where(t => t.Namespace == "Common.Protocol.Proto" && (
                 t.Name.EndsWith("Req") ||
                 t.Name.EndsWith("Notify") ||
