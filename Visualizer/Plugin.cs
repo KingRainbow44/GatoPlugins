@@ -71,10 +71,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         var config = Instance._config = Instance.GetConfig(new Config());
         Blacklisted.AddRange(config.Blacklisted
-            .Select(name => _nameMap.TryGetValue(name, out var id) ? id : CmdID.Unknown)
+            .Select(name => _nameMap.GetValueOrDefault(name, CmdID.Unknown))
             .ToList());
         Highlighted.AddRange(config.Highlighted
-            .Select(name => _nameMap.TryGetValue(name, out var id) ? id : CmdID.Unknown)
+            .Select(name => _nameMap.GetValueOrDefault(name, CmdID.Unknown))
             .ToList());
         HighlightedOnly = config.HighlightedOnly;
         Obfuscated = config.IsObfuscated;
@@ -91,7 +91,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         // Initialize the packet map.
         AppDomain.CurrentDomain
             .GetAssemblies()
-            .First(t => t.GetName().Name == "Common").GetTypes()
+            .First(t => t.GetName().Name == "Protocol").GetTypes()
             .Where(t => t.Namespace == "Common.Protocol.Proto" && (
                 t.Name.EndsWith("Req") ||
                 t.Name.EndsWith("Notify") ||
@@ -105,7 +105,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         var typeDict = AppDomain.CurrentDomain
             .GetAssemblies()
-            .First(t => t.GetName().Name == "Common").GetTypes()
+            .First(t => t.GetName().Name == "Protocol").GetTypes()
             .Where(t => t.Namespace == "Common.Protocol.Proto")
             .ToList();
 
@@ -113,8 +113,8 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         foreach (var name in Enum.GetNames<CmdID>()) {
             var value = (CmdID)Enum.Parse(typeof(CmdID), name);
             var t = typeDict.FirstOrDefault(t => t.Name == name);
-            if (t != null && !_packetMap.ContainsKey(value)) {
-                _packetMap.Add(value, t);
+            if (t != null) {
+                _packetMap.TryAdd(value, t);
             }
         }
 
