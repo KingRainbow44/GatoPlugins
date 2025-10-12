@@ -6,8 +6,6 @@ using FreakyProxy.Data;
 using FreakyProxy.PacketProcessor;
 using Packando;
 
-using static FreakyProxy.PacketProcessor.ReturnValues;
-
 namespace TheOtherTraveler;
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
@@ -139,7 +137,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     }
 
     [Handler(CmdID.SceneEntityAppearNotify)]
-    public static ValueTask<PacketResult> HandleSceneEntityAppearNotify(Session session, PacketHead _,
+    public static PacketResult HandleSceneEntityAppearNotify(Session session, PacketHead _,
         SceneEntityAppearNotify msg) {
         foreach (var entity in msg.EntityList) {
             if (entity.EntityType != ProtEntityType.ProtEntityAvatar) continue;
@@ -150,11 +148,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             UpdateSceneAvatarInfo(info);
         }
 
-        return Intercept;
+        return PacketResult.Intercept;
     }
 
     [Handler(CmdID.SceneTeamUpdateNotify)]
-    public static ValueTask<PacketResult> HandleSceneTeamUpdateNotify(Session session, PacketHead _,
+    public static PacketResult HandleSceneTeamUpdateNotify(Session session, PacketHead _,
         SceneTeamUpdateNotify msg) {
         foreach (var avatar in msg.SceneTeamAvatarList) {
             var avatarInfo = avatar?.SceneEntityInfo?.Avatar;
@@ -162,11 +160,11 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
             UpdateSceneAvatarInfo(avatarInfo);
         }
-        return Intercept;
+        return PacketResult.Intercept;
     }
 
     [Handler(CmdID.AvatarDataNotify)]
-    public static ValueTask<PacketResult> HandleAvatarDataNotify(Session session, PacketHead _,
+    public static PacketResult HandleAvatarDataNotify(Session session, PacketHead _,
         AvatarDataNotify msg) {
         foreach (var avatar in msg.AvatarList) {
             var avatarId = avatar.AvatarId;
@@ -175,6 +173,6 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             UpdateAvatarInfo(avatar);
         }
 
-        return Intercept;
+        return PacketResult.Intercept;
     }
 }
