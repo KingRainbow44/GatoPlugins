@@ -19,7 +19,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
     public override void OnLoad() {
         _instance = this;
-        Logger.Info("The Other Traveler plugin loaded.");
+        Logger.Information("The Other Traveler plugin loaded.");
     }
 
     public override void OnUnload() {

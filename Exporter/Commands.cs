@@ -11,6 +11,6 @@ public static class Commands {
         var export = session.Data<ExporterData>();
 
         await export.WriteToFile();
-        await sender.SendMessage("Your data has been saved!");
+        sender.SendMessage("Your data has been saved!");
     }
 }

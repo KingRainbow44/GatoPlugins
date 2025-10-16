@@ -13,10 +13,10 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public override void OnLoad() {
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
 
-        Logger.Info("Map Teleport plugin loaded.");
+        Logger.Information("Map Teleport plugin loaded.");
     }
 
-    private static async Task OnReceivePacket(ReceivePacketEvent @event) {
+    private static void OnReceivePacket(ReceivePacketEvent @event) {
         var packet = @event.Packet;
         if (packet.CmdID != CmdID.MarkMapReq) return;
 
@@ -40,7 +40,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         var player = @event.Session.Player;
         if (player.SelectedAvatar is { } avatar) {
             // TODO: Implement cross-scene teleportation.
-            await avatar.Teleport(position);
+            avatar.Teleport(position);
         }
     }
 }

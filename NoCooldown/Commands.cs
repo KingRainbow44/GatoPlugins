@@ -10,30 +10,32 @@ public static class Commands {
 
     [Command("cooldown", CooldownUsage, "Enables or disables cooldowns.",
         Aliases = ["cd", "skillcd"])]
-    public static async Task Cooldown(ICommandSender sender, string[] args) {
+    public static Task Cooldown(ICommandSender sender, string[] args) {
         var player = sender.AsPlayer();
         var session = player.Session;
 
         if (args.Length < 1) {
-            await sender.SendMessage($"Usage: {CooldownUsage}");
-            return;
+            sender.SendMessage($"Usage: {CooldownUsage}");
+            return Task.CompletedTask;
         }
 
         try {
             var value = args[0].ParseBool() ? 1 : 0;
-            foreach (var avatar in player.TeamManager.Avatars) {
+            foreach (var avatar in player.TeamManager.SceneTeamAvatarList) {
                 var packet = new AvatarFightPropUpdateNotify {
-                    AvatarGuid = avatar.Guid
+                    AvatarGuid = avatar.AvatarGuid
                 };
                 packet.FightPropMap.Add(80, value);
 
-                await session.SendClient(CmdID.AvatarFightPropNotify, packet);
+                session.SendClient(CmdID.AvatarFightPropNotify, packet);
             }
 
             var message = value == 1 ? "enabled" : "disabled";
-            await sender.SendMessage($"Avatar skill cooldowns are now {message}.");
+            sender.SendMessage($"Avatar skill cooldowns are now {message}.");
         } catch (Exception) {
-            await sender.SendMessage($"Invalid value. Usage: {CooldownUsage}");
+            sender.SendMessage($"Invalid value. Usage: {CooldownUsage}");
         }
+
+        return Task.CompletedTask;
     }
 }

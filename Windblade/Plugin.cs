@@ -46,7 +46,7 @@ public static class Windblade {
             var packet = new PlayerNormalLuaShellNotify {
                 Luashell = ByteString.CopyFrom(bytecode)
             };
-            await session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
+            session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
 
             return true;
         } catch (Exception) {
@@ -71,11 +71,11 @@ public static class Windblade {
     /// <summary>
     /// Executes a Lua script.
     /// </summary>
-    public static async void Execute(Session session, byte[] payload) {
+    public static void Execute(Session session, byte[] payload) {
         var packet = new PlayerNormalLuaShellNotify {
             Luashell = ByteString.CopyFrom(payload)
         };
-        await session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
+        session.SendClient(CmdID.PlayerNormalLuaShellNotify, packet);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         CommandProcessor.RegisterAllCommands("Windblade");
 
-        Logger.Info("Windblade plugin loaded.");
+        Logger.Information("Windblade plugin loaded.");
     }
 
     public override void OnUnload() {

@@ -13,15 +13,15 @@ public static class Commands {
         var session = sender.AsPlayer().Session;
 
         if (args.Length == 0) {
-            await sender.SendMessage($"Usage: {WindyUsage}");
+            sender.SendMessage($"Usage: {WindyUsage}");
             return;
         }
 
         var script = string.Join(' ', args);
         if (await Windblade.ExecuteScript(session, script)) {
-            await sender.SendMessage("Executed Lua script!".Colored(Color.Aquamarine));
+            sender.SendMessage("Executed Lua script!".Colored(Color.Aquamarine));
         } else {
-            await sender.SendMessage("Failed to execute Lua script.".Colored(Color.Red));
+            sender.SendMessage("Failed to execute Lua script.".Colored(Color.Red));
         }
     }
 }

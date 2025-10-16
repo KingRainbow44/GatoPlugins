@@ -30,7 +30,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         CommandProcessor.RegisterAllCommands("InfiniteStamina");
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
 
-        Logger.Info("Infinite Stamina plugin loaded.");
+        Logger.Information("Infinite Stamina plugin loaded.");
     }
 
     public override void OnUnload() {

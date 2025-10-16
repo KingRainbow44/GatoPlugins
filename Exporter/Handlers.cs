@@ -7,17 +7,17 @@ namespace Exporter;
 
 public static class Handlers {
     [Handler(CmdID.PlayerStoreNotify)]
-    public static ValueTask<PacketResult> PlayerStoreNotify(Session session, PacketHead _, PlayerStoreNotify msg) {
+    public static PacketResult PlayerStoreNotify(Session session, PacketHead _, PlayerStoreNotify msg) {
         var export = session.Data<ExporterData>();
         foreach (var item in msg.ItemList) {
             export.AddItem(item);
         }
 
-        return ReturnValues.Forward;
+        return PacketResult.Forward;
     }
 
     [Handler(CmdID.AvatarDataNotify)]
-    public static ValueTask<PacketResult> AvatarDataNotify(Session session, PacketHead _, AvatarDataNotify msg) {
+    public static PacketResult AvatarDataNotify(Session session, PacketHead _, AvatarDataNotify msg) {
         var export = session.Data<ExporterData>();
         foreach (var avatar in msg.AvatarList) {
             try {
@@ -29,6 +29,6 @@ public static class Handlers {
             }
         }
 
-        return ReturnValues.Forward;
+        return PacketResult.Forward;
     }
 }

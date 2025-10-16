@@ -7,7 +7,7 @@ public static class Commands {
     private const string StaminaUsage = "stamina <on|off>";
 
     [Command("stamina", StaminaUsage, "Enables or disables infinite stamina.")]
-    public static async Task Stamina(ICommandSender sender, string[] args) {
+    public static Task Stamina(ICommandSender sender, string[] args) {
         var session = sender.AsPlayer().Session;
 
         try {
@@ -21,6 +21,7 @@ public static class Commands {
             Plugin.Enabled[session] = !Plugin.GetEnabled(session);
         }
 
-        await sender.SendMessage($"Infinite stamina is now {(Plugin.GetEnabled(session) ? "enabled" : "disabled")}.");
+        sender.SendMessage($"Infinite stamina is now {(Plugin.GetEnabled(session) ? "enabled" : "disabled")}.");
+        return Task.CompletedTask;
     }
 }

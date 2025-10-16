@@ -13,7 +13,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         CommandProcessor.RegisterAllCommands("NoCooldown");
 
-        Logger.Info("No Cooldown plugin loaded.");
+        Logger.Information("No Cooldown plugin loaded.");
     }
 
     public override void OnUnload() {

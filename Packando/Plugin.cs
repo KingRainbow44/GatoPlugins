@@ -117,7 +117,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                 invokeResult = packetResult;
             }
             else {
-                Logger.Warn($"Invalid packet handler result while invoking for {packet.CmdID}");
+                Logger.Warning($"Invalid packet handler result while invoking for {packet.CmdID}");
                 continue;
             }
 

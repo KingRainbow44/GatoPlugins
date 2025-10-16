@@ -16,7 +16,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
 
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
 
-        Logger.Info("UIDHider plugin loaded.");
+        Logger.Information("UIDHider plugin loaded.");
     }
 
     /// <summary>

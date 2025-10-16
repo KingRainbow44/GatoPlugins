@@ -7,7 +7,7 @@ namespace NoCooldown;
 
 public static class Handlers {
     [Handler(CmdID.SceneTeamUpdateNotify)]
-    public static async ValueTask<PacketResult> OnSceneTeamUpdateNotify(
+    public static PacketResult OnSceneTeamUpdateNotify(
         Session session, PacketHead _, SceneTeamUpdateNotify msg) {
         if (!Plugin.Instance.Config.Enabled) {
             return PacketResult.Forward;
@@ -20,7 +20,7 @@ public static class Handlers {
                 FightPropMap = { {80, 1} }
             };
 
-            await session.SendClient(CmdID.AvatarFightPropUpdateNotify, packet);
+            session.SendClient(CmdID.AvatarFightPropUpdateNotify, packet);
         }
 
         return PacketResult.Forward;

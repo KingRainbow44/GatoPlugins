@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 2,
+[assembly: PluginManifest(ManifestVersion = 4,
     Name = "Template",
     Author = "<your name>",
     Description = "A template for creating GatoProxy plugins.",

@@ -79,7 +79,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         HighlightedOnly = config.HighlightedOnly;
         Obfuscated = config.IsObfuscated;
 
-        Instance.Logger.Info("Visualizer config has been loaded!");
+        Instance.Logger.Information("Visualizer config has been loaded!");
     }
 
     private Config _config = new();
@@ -136,13 +136,13 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
                     Logger.Debug(message);
                     break;
                 case LogLevel.Warn:
-                    Logger.Warn(message);
+                    Logger.Warning(message);
                     break;
                 case LogLevel.Error:
                     Logger.Error(message);
                     break;
                 case LogLevel.Info:
-                    Logger.Info(message);
+                    Logger.Information(message);
                     break;
                 default:
                     throw new Exception("Unknown logging level.");
@@ -157,7 +157,7 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
         PluginManager.AddEventListener<ReceivePacketEvent>(OnReceivePacket);
         PluginManager.AddEventListener<SendPacketEvent>(OnSendPacket);
 
-        Logger.Info("Visualizer plugin loaded.");
+        Logger.Information("Visualizer plugin loaded.");
     }
 
     public override void OnUnload() {

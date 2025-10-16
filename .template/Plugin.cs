@@ -4,6 +4,6 @@ namespace Template;
 
 public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
     public override void OnLoad() {
-        Logger.Info("Template plugin loaded.");
+        Logger.Information("Template plugin loaded.");
     }
 }

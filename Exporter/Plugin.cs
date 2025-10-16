@@ -41,6 +41,6 @@ public class Plugin(PluginInfo info) : FreakyProxy.Plugin(info) {
             RelicSetNames[setId] = name;
         }
 
-        Logger.Info("Exporter plugin loaded.");
+        Logger.Information("Exporter plugin loaded.");
     }
 }

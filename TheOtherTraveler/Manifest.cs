@@ -1,6 +1,6 @@
 ﻿using FreakyProxy;
 
-[assembly: PluginManifest(ManifestVersion = 3,
+[assembly: PluginManifest(ManifestVersion = 4,
     Name = "The Other Traveler",
     Author = "KingRainbow44",
     Description = "Become the one who you love..",
